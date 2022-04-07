@@ -224,3 +224,87 @@ where lba_uprawnionych >2000 and przewodniczacy='Czerwiński' order by adres_pun
 select kandydat, DATE_PART('year',current_date)-rok_ur as Wiek from kandydaci 
 where nr_listy = '1' and wyksztalcenie in ('zawodowe','wyższe')
 ```
+
+### Nazwiska i rok urodzenia kandydatów, na których głosowano w co najmniej 5  (zarejestrowanych)  punktach wyborczych
+```sql
+
+```
+
+### Dopisz do bazy informacje o punkcie wyborczym numer  13, który mieści się w urzędzie na ulicy Wiśniowej 13. Liczba uprawnionych do głosowania w tym punkcie wynosi 2320.
+```sql
+INSERT INTO punkty_wyb (nr_punktu, adres_punktu, przewkomisji, miejsce, lba_uprawnionych)
+VALUES (13, 'Wiśniowa 13', null , 'urząd', 2320);
+```
+
+### Zdefiniuj warunek ograniczający: Żadna partia nie powstała przed rokiem 1940
+```sql
+(
+    nr_listy integer,
+    naz_partii character varying(20) COLLATE pg_catalog."default",
+    rok_zalozenia integer,
+    przewodniczacy character varying(20) COLLATE pg_catalog."default",
+    liczba_czlonkow integer,
+    CONSTRAINT zadna_partia_przed_1940 CHECK (rok_zalozenia > 1940)
+)
+```
+
+### Nazwisko, nr punktu, liczba głosów  oddanych na kandydatów  z partii białej lub różowej w ilościach mniejszych  niż 200. Podaj uporządkowane malejąco wg liczby głosów
+```sql
+select Distinct glosowanie.kandydat, nr_punktu, lba_glosow from glosowanie
+left join kandydaci on glosowanie.kandydat=kandydaci.kandydat
+left join partie on partie.nr_listy=kandydaci.nr_listy
+where (naz_partii='biała' or naz_partii='różowa')
+and lba_glosow<'200'
+order by lba_glosow desc;
+```
+
+### Ilu jest kandydatów z wykształceniem takim, jakie ma kandydat Nebeski
+```sql
+select count(kandydat) from kandydaci where wyksztalcenie =
+(select wyksztalcenie from kandydaci where kandydat = 'Nebeski');
+```
+
+### Nazwisko kandydata, liczba głosów i numer punktu dla kandydatów nie pochodzących z oficjalnej listy kandydatów
+```sql
+select glosowanie.kandydat, lba_glosow, nr_punktu from glosowanie
+left join kandydaci on glosowanie.kandydat=kandydaci.kandydat
+where kandydaci.kandydat is null;
+```
+
+### Średni wiek  kandydatów z poszczególnych  partii powstałych po 1980 roku
+```sql
+select avg(DATE_PART('year',current_date)-rok_ur) as sredni_wiek, naz_partii
+from kandydaci
+natural join partie
+where rok_zalozenia > '1980'
+group by naz_partii;
+```
+
+### Wiek najstarszego kandydata na każdej z list (nr_listy, wiek najstarszego kandydata)
+```sql
+select nr_listy , max(DATE_PART('year',current_date)-rok_ur) as Wiek_najstarszego_kandydata
+from kandydaci
+natural join partie
+group by nr_listy;
+```
+
+### Zdefiniuj więzy integralności referencyjnej między tabelami  glosowanie - kandydaci. W razie trudności, znajdź przyczyny i usuń problemy budując odpowiednie zapytania.  Zbudowane pytania wklej jako odpowiedź. Wklej także definicje (zakładka SQL) zmienionych tabel.
+```sql
+XD
+```
+
+### Nazwy partii, z których kandydaci urodzeni po roku 1960 uzyskali łącznie mniej niż 1000 głosów
+```sql
+select naz_partii from partie
+left join kandydaci on kandydaci.nr_listy=partie.nr_listy
+left join glosowanie on kandydaci.kandydat=glosowanie.kandydat
+where rok_ur>1960
+group by naz_partii
+having SUM(lba_glosow)<1000;
+```
+
+### Punkt wyborczy numer 3 przeniesiono na ulicę Fiołkową 22,  do urzędu.
+```sql
+Update punkty_wyb set adres_punktu = 'Fiołkowa 22'
+where nr_punktu = '3';
+```
