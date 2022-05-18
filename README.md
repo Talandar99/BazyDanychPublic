@@ -11,7 +11,7 @@ SELECT CONCAT(ROUND(CAST(SUM(glosowanie.lba_glosow) AS decimal) / punkty_wyb.lba
 ```
 
 
-#### Zdefiniuj wyzwalacz czerw_dorosly, który gwarantuje, że każdy kandydat z partii czerwonej ma więcej niż 30 lat. Treść wyzwalacza z okna SQL wklej jako odpowiedź. Podaj również zapytania, za pomocą których sprawdzasz działanie wyzwalacza.
+### Zdefiniuj wyzwalacz czerw_dorosly, który gwarantuje, że każdy kandydat z partii czerwonej ma więcej niż 30 lat. Treść wyzwalacza z okna SQL wklej jako odpowiedź. Podaj również zapytania, za pomocą których sprawdzasz działanie wyzwalacza.
 ```sql
     Wyzwalacz
 
