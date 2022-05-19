@@ -308,3 +308,6 @@ having SUM(lba_glosow)<1000;
 Update punkty_wyb set adres_punktu = 'Fiołkowa 22'
 where nr_punktu = '3';
 ```
+
+![obraz](https://user-images.githubusercontent.com/32677600/169325186-9b26d2fb-a4db-4c69-8a92-8df4138ed2c2.png)
+
